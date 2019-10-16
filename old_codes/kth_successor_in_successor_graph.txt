@@ -1,0 +1,32 @@
+# in a successor graph each node has outdegree 1 if there are n nodes then there are n edges and a cycle is present in the graph
+def k_succesor_of_x(x,k,dp): #calculates the 2**k successor in a successor graph
+    if k==0:
+        return dp[0][x]
+    elif dp[k][x]!=-1:
+        return dp[k][x]
+    else:
+        dp[k][x]=k_succesor_of_x(k_succesor_of_x(x,k-1,dp),k-1,dp)
+        return dp[k][x]
+
+import math
+n = int(raw_input())
+u=int(raw_input()) # for the limit till which we to calculate for max
+u=int(math.ceil(math.log(u,2)))
+dp = [[-1]*n for i in xrange(0,u+1)]
+l=[int(x) for x in raw_input().split()]
+dp[0]=l
+for i in xrange(0,u+1):
+    print(dp[i])
+last = u
+print(len(dp))
+for i in xrange(0,n):
+    k_succesor_of_x(i,last ,dp)
+m = int(raw_input())
+q=bin(int(raw_input()))[2:]
+r = q[::-1]
+ans =  m
+for i in xrange(0,len(q)):
+    if q[i]=='1':
+        ans = dp[i][ans]
+
+print ans

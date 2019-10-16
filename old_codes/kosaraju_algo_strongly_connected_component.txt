@@ -1,0 +1,59 @@
+from collections import defaultdict
+large = 10**9
+stack =[]
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)
+        self.reverse_graph = defaultdict(list)# default dictionary to store graph
+        self.visited = [False]*self.V
+        self.top_sorted = []
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+        self.reverse_graph[v].append(u)
+        
+    def dfs(self):
+        for i in xrange(0,self.V):
+            if self.visited[i]==False:
+                self.dfs_util(i)
+            if(len(self.top_sorted)==self.V):
+                break
+
+    def kosaraju_dfs2(self):
+        self.visited = [False]*self.V
+        strongly_connected_components=[]
+        for i in xrange(self.V-1,-1,-1):
+            if self.visited[self.top_sorted[i]]==False:
+                strongly_coonected_nodes = []
+                self.kosaraju_dfs_util2(self.top_sorted[i],strongly_coonected_nodes)
+                strongly_connected_components.append(strongly_coonected_nodes)
+
+        return strongly_connected_components
+
+    def dfs_util(self, s):
+        if self.visited[s] == True:
+            return
+        self.visited[s] = True
+        for u in self.graph[s]:
+            self.dfs_util(u)
+        self.top_sorted.append(s)
+
+    def kosaraju_dfs_util2(self, s,strongly_coonected_nodes):
+        if self.visited[s] == True:
+            return
+        self.visited[s] = True
+        strongly_coonected_nodes.append(s)
+        for u in self.reverse_graph[s]:
+            self.kosaraju_dfs_util2(u,strongly_coonected_nodes)
+
+
+n = int(raw_input())
+edges = int(raw_input())
+g = Graph(n)
+for i in xrange(0,edges):
+    u,v = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v) # 0 based indexing of graph nodes
+g.dfs()
+print(g.kosaraju_dfs2())

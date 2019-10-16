@@ -1,0 +1,28 @@
+# your code goes here
+def find(ar,node):
+	if ar[node]!=node:
+		ar[node]=find(ar,ar[node])
+	return ar[node]
+ 
+def union(ar,u,v):
+	root_u = find(ar,u)
+	root_v = find(ar,v)
+	if(root_u!=root_v):
+		ar[root_u]=root_v
+ 
+test = int(raw_input())
+while test>0:
+	test-=1
+	n,m = map(int,raw_input().split())
+	ar = range(0,n)
+	for i in range(0,m):
+		u,v = map(int,raw_input().split())
+		union(ar,u,v)
+	q=int(raw_input())
+	for i in range(0,q):
+		s,d=map(int,raw_input().split())
+		if(find(ar,s)==find(ar,d)):
+			print "YO"
+		else:
+			print "NO"
+ 

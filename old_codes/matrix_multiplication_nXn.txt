@@ -1,0 +1,8 @@
+def matmul(mat1,mat2,n):
+    ans = [[0] * n for i in xrange(0, n)]
+    for i in xrange(0,n):
+        for j in xrange(0,n):
+            for k in xrange(0,n):
+                ans[i][j]+=mat1[i][k]*mat2[k][j]
+
+    return ans

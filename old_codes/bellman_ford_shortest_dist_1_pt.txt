@@ -1,0 +1,25 @@
+# to find distance from  single source to all other nodes in a graph
+# graph is represented using edge list
+n = int(raw_input())
+e = int(raw_input())
+
+edges = []
+for i in range(0, e):
+    a, b, w = map(int, raw_input().split())
+    edges.append((a, b, w))
+distance = [999] * n
+start = int(raw_input())
+distance[start] = 0
+for i in xrange(0, n-1):
+    flag = False
+    for edge in edges:
+        a = edge[0]
+        b = edge[1]
+        w = edge[2]
+        if distance[b] > distance[a] + w:
+            distance[b] = distance[a]+w
+            flag = True
+
+    if flag ==False:
+        break # for optimality if the distance does not change in one round then the graph has converged
+print distance

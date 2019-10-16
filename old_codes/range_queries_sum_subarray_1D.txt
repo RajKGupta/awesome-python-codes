@@ -1,0 +1,14 @@
+l = [int(x) for x in raw_input().split()]
+size =len(l)
+temp = [l[0]]
+
+for i in range(1,size):
+    temp.append(temp[i-1]+l[i])
+
+q=int(raw_input())
+for Q in range(0,q):
+    a,b = [int(x) for x in raw_input().split()]
+    if a==0:
+        print temp[b]
+    else:
+        print temp[b]-temp[a-1]

@@ -1,0 +1,91 @@
+class TrieNode:
+    def __init__(self):
+        self.children = [None] * 26
+        self.isEndOfWord = False
+        self.smallest  =None
+
+class Trie:
+
+    def __init__(self):
+        self.root = self.getNode()
+
+    def getNode(self):
+        return TrieNode()
+
+    def _charToIndex(self, ch,a='a'):
+        #print("Hello",ch,a)
+        return ord(ch) - ord(a)
+
+    def insert(self, key):
+        pCrawl = self.root
+        length = len(key)-1
+        for level in range(length):
+            index = self._charToIndex(key[level])
+            if not pCrawl.children[index]:
+                if pCrawl.smallest==None:
+                    pCrawl.smallest=key[level]
+                else:
+                    if self._charToIndex(key[level],pCrawl.smallest)<0:
+                        pCrawl.smallest=key[level]
+                pCrawl.children[index] = self.getNode()
+            pCrawl = pCrawl.children[index]
+        pCrawl.isEndOfWord = True
+
+    def lexicograph(self,root,key):
+        if root.isEndOfWord:
+            return
+        else:
+            key.append(root.smallest)
+            self.lexicograph(root.children[self._charToIndex(root.smallest)],key)
+
+
+    def search(self, key):
+        l=[]
+        pCrawl = self.root
+        length = len(key);
+        for level in range(length):
+            index = self._charToIndex(key[level])
+            if not pCrawl.children[index]:
+                if pCrawl.isEndOfWord:
+                    return l
+                else:
+                    self.lexicograph(pCrawl,l)
+                    return l
+            pCrawl = pCrawl.children[index]
+            l.append(key[level])
+        if pCrawl.isEndOfWord:
+            return l
+        else:
+            self.lexicograph(pCrawl,l)
+            return l
+
+def main():
+    from sys import stdin, stdout
+    n = int(raw_input())
+    string = [None]*n
+    t = Trie()
+    query_list = []
+    for N in xrange(0,n):
+        string[N] = stdin.readline()
+        query_list.append([])
+    q = int(stdin.readline())
+
+    for Q in xrange(0,q):
+        temp = [x for x in stdin.readline().split()]
+        query_list[int(temp[0])-1].append((temp[1],Q))
+    count = 0
+    answer = [None]*q
+    for i in xrange(n):
+        if count==q:
+            break
+        t.insert(string[i])
+        for temp in query_list[i]:
+            answer[temp[1]]=t.search(temp[0])
+    for i in xrange(0,q):
+        print ''.join(i for i in answer[i])
+
+
+
+
+if __name__ == "__main__":
+    main()

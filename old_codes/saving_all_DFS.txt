@@ -1,0 +1,69 @@
+from collections import defaultdict
+ 
+# This class represents a directed graph using
+# adjacency list representation
+class Graph:
+ 
+    # Constructor
+    def __init__(self,vertices):
+ 
+        # default dictionary to store graph
+        self.graph = defaultdict(list)
+        self.DFSList = defaultdict(list)
+        for i in range(0,vertices):
+        	self.graph[i]=[]
+        	self.DFSList[i]=[]
+ 
+ 
+    # function to add an edge to graph
+    def addEdge(self,u,v):
+        if u!=v:
+        	self.graph[u].append(v)
+        	self.graph[v].append(u)
+ 
+    # A function used by DFS
+    def DFSUtil(self,v,visited,n):
+ 
+        # Mark the current node as visited and print it
+        visited[v]= True
+        self.DFSList[n].append(v)
+ 
+        # Recur for all the vertices adjacent to this vertex
+        for i in self.graph[v]:
+            if visited[i] == False:
+                self.DFSUtil(i, visited,n)
+ 
+ 
+    # The function to do DFS traversal. It uses
+    # recursive DFSUtil()
+    def DFS(self,v):
+ 
+        # Mark all the vertices as not visited
+        visited = [False]*(len(self.graph))
+ 
+        # Call the recursive helper function to print
+        # DFS traversal
+        self.DFSUtil(v,visited,v)
+ 
+ 
+# Driver code
+# Create a graph given in the above diagram
+t=input()
+for z in range(0,t):
+	n,m=map(int, raw_input().split())
+	g = Graph(n)
+ 
+	for M in range(0, m):
+		u,v = map(int, raw_input().split())
+		g.addEdge(u,v)
+ 
+	for i in range(0,n):
+		g.DFS(i)
+ 
+	q = input()
+	for Q in range(0, q):
+		u,v = map(int, raw_input().split())
+		if v in g.DFSList[u]:
+			print "YO"
+		else:
+			print "NO"

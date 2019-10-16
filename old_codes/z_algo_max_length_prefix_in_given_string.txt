@@ -1,0 +1,25 @@
+combined = raw_input()
+size_input = len(combined)
+
+z_array = [0]*(size_input)
+
+for i in xrange(1,len(z_array)):
+    if(combined[i]==combined[0]):
+        
+        count = 1
+        for j in xrange(1,min(i,size_input-i)):
+            if combined[i+j]==combined[j]:
+                count+=1
+            else:
+                break
+
+        z_array[i]=count
+        for j in range(1,count+1):
+            if z_array[j]+i+j<i+count and z_array[j]+i+j<len(z_array):
+                z_array[i+j]=z_array[j]
+            else:
+                break
+    else:
+        z_array[i]=0
+
+print(z_array)

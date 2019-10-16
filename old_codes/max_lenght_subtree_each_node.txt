@@ -1,0 +1,31 @@
+from collections import defaultdict
+class Graph:
+    def __init__(self, vertices):
+        self.graph = defaultdict(list)  # dictionary containing adjacency List
+        self.V = vertices
+        self.maxlength = [1]*self.V# No. of vertices
+
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+
+    def max_len_path(self,s,p): # including the node at which we are searching
+        self.maxlength[s]=1
+        for j in self.graph[s]:
+            if j!=p:
+                self.max_len_path(j, s)
+                self.maxlength[s]=max(self.maxlength[j]+1,self.maxlength[s])
+
+
+def main():
+    from sys import stdin, stdout
+    n = int(stdin.readline())
+    e = int(stdin.readline())
+    g =Graph(n)
+    for i in xrange(0,e):
+        u,v = [int(x) for x in stdin.readline().split()]
+        g.addEdge(u,v)
+    g.max_len_path(0,-1)
+    print(g.maxlength)
+if __name__ == "__main__":
+    main()

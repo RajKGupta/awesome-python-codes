@@ -1,0 +1,17 @@
+def binary_search(l,item,start,end):
+	mid = int((start+end)/2)
+	#print mid
+	if l[mid]==item:
+		return mid
+	else:
+		while (start<=end):
+			if l[mid]<item:
+				start = mid + 1
+			elif l[mid] == item:
+				return mid
+			else:
+				end = mid-1
+			mid = int((start+end)/2)
+			
+		
+		return -1

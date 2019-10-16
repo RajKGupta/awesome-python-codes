@@ -1,0 +1,14 @@
+import operator
+n=int(raw_input())
+l=[]
+for i in range(0,n):
+    a,b=[int(x) for x in raw_input().split()]
+    l.append((i+1,a,b))
+l.sort(key=operator.itemgetter(2))
+final=[]
+endtime=0
+for i in l:
+    if i[1]>=endtime:
+        final.append((i))
+        endtime = i[2]
+print final

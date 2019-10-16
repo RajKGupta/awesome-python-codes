@@ -1,0 +1,86 @@
+# print the euler circuit/path
+
+"""In a directed graph, we focus on indegrees and outdegrees of the nodes. A directed graph contains an Eulerian path exactly 
+when all the edges belong to the same strongly connected component and 
+
+1) in each node, the indegree equals the outdegree, or
+2) in one node, the indegree is one larger than the outdegree, in another node, the outdegree is one larger than the 
+indegree, and in all other nodes, the indegree equals the outdegree.
+ 
+In the ?rst case, each Eulerian path is also an Eulerian circuit, and in the second case, the graph contains an Eulerian 
+path that begins at the node whose outdegree is larger and ends at the node whose indegree is larger. 
+
+"""
+from collections import defaultdict
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)
+        self.visited = [False]*self.V
+        self.dfs_stack =[]
+        self.inedge = [0]*self.V
+        self.outedge = [0] * self.V
+
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+        self.inedge[v]+=1
+        self.outedge[u]+=1
+
+    def start_end(self):
+        start = 0
+        end = -1
+        count_in = 0
+        count_out=0
+        for i in xrange(0, self.V):
+            if self.inedge[i]==self.outedge[i]+1:
+                count_in+=1
+                end =i
+            if self.outedge[i]==self.inedge[i]+1:
+                count_out+=1
+                start=i
+        if count_in&1==1 and count_out&1==1 and start!=end:
+            return start,end
+        elif count_in&1==0 and count_out&1==0:
+            return 0,0
+        else:
+            return -1,-1
+
+    def find_euler_circuit(self,start):
+        l = [0]*self.V
+        for i in xrange(0,self.V):
+            l[i] = len(self.graph[i])
+        curr_path = []
+        euler_circuit =[]
+        curr_path.append(start)
+        curr_index = start
+
+        while(curr_path):
+            if l[curr_index]>0:
+                curr_path.append(curr_index)
+                next_v = self.graph[curr_index].pop()
+
+                l[curr_index]-=1
+
+                curr_index = next_v
+            else:
+                euler_circuit.append(curr_index)
+                curr_index = curr_path.pop()
+
+        print euler_circuit[::-1] # it is the reverse of the euler circuit found above
+
+
+n = int(raw_input())
+g = Graph(n)
+e = int(raw_input())
+for i in xrange(0,e):
+    u,v = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v) # 0 based indexing of graph nodes
+start,end=g.start_end()
+if(start==-1):
+    print "Not Possible"
+elif start!=end:
+    g.find_euler_circuit(start)
+else:
+    g.find_euler_circuit(0)

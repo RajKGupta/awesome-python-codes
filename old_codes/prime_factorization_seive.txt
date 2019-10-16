@@ -1,0 +1,36 @@
+import math
+maxlimit = 100
+spf = [1]*maxlimit # smallest prime factor array
+for i in xrange(2,maxlimit):
+    if spf[i]==1:
+        spf[i] = i
+        for j in xrange(i,maxlimit,i):
+            if spf[j]==1:
+                spf[j]=i
+t= int(raw_input())
+for T in xrange(0,t):
+    number  = int(raw_input())
+    orig_no = number
+    prime_factor = {}
+    while number>1:
+        if spf[number] in prime_factor:
+            prime_factor[spf[number]]+=1
+        else:
+            prime_factor[spf[number]]=1
+        number/=spf[number]
+
+    print prime_factor
+    ### number of factors
+    number_of_factors = 1
+    for keys in prime_factor:
+        number_of_factors *= (prime_factor[keys]+1)
+    print number_of_factors
+
+    sum_of_factors = 1
+    for keys in prime_factor:
+        sum_of_factors*= (keys**(prime_factor[keys]+1)-1)/(keys-1)
+    print sum_of_factors
+
+    product_of_factors = orig_no**(int(math.ceil(float(number_of_factors)/2)))
+    print product_of_factors
+    ## for product of factors

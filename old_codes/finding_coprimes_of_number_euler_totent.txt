@@ -1,0 +1,31 @@
+import bisect
+maxlimit = 100
+prime_numbers = []
+spf = [1]*maxlimit # smallest prime factor array
+for i in xrange(2,maxlimit):
+    if spf[i]==1:
+        spf[i] = i
+        prime_numbers.append(i)
+        for j in xrange(i,maxlimit,i):
+            if spf[j]==1:
+                spf[j]=i
+t= int(raw_input())
+for T in xrange(0,t):
+    number  = int(raw_input())
+    orig_no = number
+
+    ##this is to be done when only the count of the coprime numbers is required the formula is given by euler totent
+    prime_factor = {}
+    while number > 1:
+        if spf[number] in prime_factor:
+            prime_factor[spf[number]] += 1
+        else:
+            prime_factor[spf[number]] = 1
+        number /= spf[number]
+
+    no_of_copriems = 1
+    for key in prime_factor:
+        no_of_copriems*=(key-1)*(key**(prime_factor[key]-1))
+    print no_of_copriems
+
+    

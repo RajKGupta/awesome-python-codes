@@ -1,0 +1,18 @@
+n = int(raw_input())
+successor = [int(x)for x in raw_input().split()]
+a = successor[0]
+b = successor[successor[0]]
+while (a!=b):
+    a = successor[a]
+    b = successor[successor[b]]
+a = x
+while (a!= b):
+    a = successor[a];
+    b = successor[b];
+first = a;
+b = successor[a];
+length = 1;
+while (a != b):
+    b = successor[b];
+    length+=1
+print length

@@ -1,0 +1,11 @@
+mod= 10**9+7
+def fastFib(n, memo = {}):
+    if n == 0 or n == 1:
+        return 1
+    try:
+        return memo[n]
+    except KeyError:
+        result = (fastFib(n-1, memo)%mod + fastFib(n-2, memo)%mod)%mod
+        memo[n] = result
+        return result
+ 

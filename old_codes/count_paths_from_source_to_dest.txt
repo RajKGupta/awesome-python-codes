@@ -1,0 +1,39 @@
+from collections import defaultdict
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)  # default dictionary to store graph
+        self.reverse_graph_mapping=defaultdict(list)
+        self.visited = [False]*n
+        self.count_paths =[0]*self.V
+
+    def count_paths_from_source_destination(self,x): # here x==node which is the source
+        if x==0:
+            self.count_paths[0]=1
+            return 1
+        elif self.visited[x]:
+            return self.count_paths[x]
+
+        else:
+            for i in self.reverse_graph_mapping[x]:
+                print i
+                self.count_paths[x] += self.count_paths_from_source_destination(i)
+            self.visited[x] =True
+            return self.count_paths[x]
+
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append((v))
+        self.reverse_graph_mapping[v].append(u)
+
+
+n = int(raw_input())
+edges = int(raw_input())
+g = Graph(n)
+for i in xrange(0,edges):
+    u,v = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v) # 0 based indexing of graph nodes
+
+g.count_paths_from_source_destination(5) # destination node
+print g.count_paths

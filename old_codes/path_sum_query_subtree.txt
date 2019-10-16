@@ -1,0 +1,70 @@
+#construct arrays to carry out subtree queries
+
+from collections import defaultdict
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)
+        self.visited = [False]*self.V
+        self.dfs_array = []
+        self.count_nodes = [1]*self.V
+        self.values=[]
+        self.path_sum_array = []
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+        
+    def dfs(self):
+        self.visited=[False]*self.V
+        for i in xrange(0,self.V):
+            if self.visited[i]==False:
+                self.dfs_util(i)
+            if(len(self.dfs_array)==self.V):
+                break
+
+    def dfs_util(self, s):
+        if self.visited[s] == True:
+            return
+
+        self.visited[s] = True
+        self.dfs_array.append(s)
+
+        for u in self.graph[s]:
+            self.dfs_util(u)
+
+    def count_nodes_subtree(self,s):
+            if self.visited[s]==True:
+                return self.visited[s]
+            for u in self.graph[s]:
+                self.count_nodes[s]+=self.count_nodes_subtree(u)
+            self.visited[s]=True
+            return self.count_nodes[s]
+
+    def path_sum(self, s):
+        for u in self.graph[s]:
+            self.path_sum_array[u] += self.path_sum_array[s]
+            self.path_sum(u)
+
+    def input_values(self):
+        self.values=[int(x) for x in raw_input().split()]
+        import copy
+        self.path_sum_array = copy.deepcopy(self.values)
+n = int(raw_input())
+g = Graph(n)
+g.input_values()
+for i in xrange(0,n-1):
+    u,v = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v) # 0 based indexing of graph nodes
+g.count_nodes_subtree(0) # root node
+g.dfs()
+print g.dfs_array
+for i in g.dfs_array:
+    print g.count_nodes[i],
+print ""
+g.path_sum(0)
+for i in g.dfs_array:
+    print g.path_sum_array[i],
+
+# when the root of a subtree is updated all child sum are inc by the same amt.
+# we can do this by updating the root and then subsequent children by iterating from root to no of children in subtree over the dfs_array

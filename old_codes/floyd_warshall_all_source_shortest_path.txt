@@ -1,0 +1,17 @@
+from collections import defaultdict
+large = 10**9
+n = int(raw_input())
+edges = int(raw_input())
+matrix = [[large]*n for x in xrange(0,n)]
+for i in xrange(0,edges):
+    u,v,w = [int(x) for x in raw_input().split()]
+    matrix[u][v]=w
+    matrix[v][u]=w
+for i in xrange(0,n):
+    matrix[i][i]=0
+for k in xrange(0,n):
+    for i in xrange(0, n):
+        for j in xrange(0, n):
+            matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+for i in xrange(0,n):
+    print(matrix[i])

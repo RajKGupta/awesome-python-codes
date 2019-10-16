@@ -1,0 +1,62 @@
+maxlimit = 100
+prime_numbers = []
+spf = [1]*maxlimit # smallest prime factor array
+for i in xrange(2,maxlimit):
+    if spf[i]==1:
+        spf[i] = i
+        prime_numbers.append(i)
+        for j in xrange(i,maxlimit,i):
+            if spf[j]==1:
+                spf[j]=i
+
+
+def power(x, y, p):
+    res = 1  # Initialize result
+
+    # Update x if it is more
+    # than or equal to p
+    x = x % p
+
+    while (y > 0):
+
+        # If y is odd, multiply
+        # x with result
+        if ((y & 1) == 1):
+            res = (res * x) % p
+
+        # y must be even now
+        y = y >> 1  # y = y/2
+        x = (x * x) % p
+
+    return res
+def gcd(a,b):
+    if(a==0):
+        return b
+    else:
+        return gcd(b%a,a)
+
+def x_inverse_mod_m(number):
+    ##this is to be done when only the count of the coprime numbers is required the formula is given by euler totent
+    prime_factor = {}
+    while number > 1:
+        if spf[number] in prime_factor:
+            prime_factor[spf[number]] += 1
+        else:
+            prime_factor[spf[number]] = 1
+        number /= spf[number]
+    no_of_copriems = 1
+    for key in prime_factor:
+        no_of_copriems*=(key-1)*(key**(prime_factor[key]-1))
+    return no_of_copriems
+
+x=int(raw_input())
+m=int(raw_input())
+if gcd(x,m)==1:
+    y= x_inverse_mod_m(m)-1
+    x_inverse=power(x,y,m)
+    print x_inverse
+else:
+    print "doesnt exist"
+
+
+

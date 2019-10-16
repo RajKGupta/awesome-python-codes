@@ -1,0 +1,16 @@
+x = int(raw_input())
+def int_to_string(x):
+    l =[]
+    count1=0
+    count0=0
+    for i in range(31,-1,-1): #79 for long long int,31 for int,
+        if((x&1<<i)==0):
+            l.append(0)
+            count0+=1
+        else:
+            l.append(1)
+            count1+=1
+    string ="".join(map(str, l))
+    return string,count1,count0
+bitstring,count1,count0= int_to_string(x)
+print bitstring,count1,count0
