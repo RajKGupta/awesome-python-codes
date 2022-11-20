@@ -1,0 +1,30 @@
+input_string = raw_input()
+prefix = raw_input()
+
+combined = prefix+"#"+input_string
+size_input = len(input_string)
+size_prefix = len(prefix)
+print(size_input)
+
+z_array = [0]*(size_input+size_prefix+1)
+
+for i in xrange(1,len(z_array)):
+    if(combined[i]==combined[0]):
+        count = 1
+        for j in xrange(1,min(i,size_input+size_prefix+1-i)):
+            print(i,j)
+            if combined[i+j]==combined[j]:
+                count+=1
+            else:
+                break
+
+        z_array[i]=count
+        for j in range(1,count+1):
+            if z_array[j]+i+j<i+count and z_array[j]+i+j<len(z_array):
+                z_array[i+j]=z_array[j]
+            else:
+                break
+    else:
+        z_array[i]=0
+        
+print(z_array)

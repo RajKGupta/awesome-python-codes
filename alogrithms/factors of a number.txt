@@ -1,0 +1,13 @@
+def factor(number):
+	k =[]
+	k.append(1)
+	k.append(number)
+	i=2
+	limit = math.sqrt(number)
+	while(i<=limit):
+		if number%i ==0:
+			k.append(i)
+			k.append(number/i)
+		i+=1
+	k.sort()
+	return k

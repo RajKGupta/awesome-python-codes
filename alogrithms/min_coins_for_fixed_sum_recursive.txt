@@ -1,0 +1,25 @@
+large = 10**10
+n=int(raw_input())
+coins = [int(x) for x in raw_input().split()]
+dic ={}
+def search(x):
+    if x in dic:
+        return dic[x]
+    elif x<0:
+        return large
+    elif x==0:
+        return 0
+    else:
+        best=large
+        for i in coins:
+            best = min(best,search(x-i)+1)
+        dic[x]=best
+        return best
+
+t=int(raw_input())
+for i in range(0,t):
+    sum=int(raw_input())
+    ans = large
+    for x in coins:
+        ans = search(sum)
+    print dic

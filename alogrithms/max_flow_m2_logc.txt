@@ -1,0 +1,75 @@
+import Queue
+from collections import defaultdict
+big = 10**9
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(dict)
+        #self.reverse_graph = defaultdict(dict)
+        self.max_flow_value = 0
+        self.visited = [False]*self.V
+        self.path=[]
+        self.c=0
+
+    # function to add an edge to graph
+    def addEdge(self, u, v,w):
+        self.graph[u][v] = w
+        #self.reverse_graph[v][u]=0
+
+    def dfs(self,start,sink,parent):
+        if self.visited[start]:
+            return
+        self.visited[start] = True
+        for key in self.graph[start].keys():
+            if key==start:
+                return
+            else:
+                if(self.graph[start][key]>=self.c):
+                    parent[key]=start
+                    #print start
+                    self.dfs(key,sink,parent)
+    def max_flow(self,source,sink,sum):
+        self.max_flow_value=0
+        self.c=sum
+        while self.c>0:
+            self.visited = [False] * self.V
+            #self.visited[source] = False
+            parent = [source] * self.V
+            parent[sink]=-1
+            self.dfs(source,sink,parent)
+            if parent[sink]!=-1:
+                flow = big
+                self.path = [sink]
+                key=sink
+                while (key != source):
+                    self.path.append(parent[key])
+                    #print(parent)
+                    flow = min(flow, self.graph[parent[key]][key])
+                    key = parent[key]
+                self.max_flow_value += flow
+                for i in xrange(len(self.path) - 1, 0, -1):
+                    if self.graph[self.path[i]][self.path[i - 1]] > flow:
+                        self.graph[self.path[i]][self.path[i - 1]] -= flow
+                    else:
+                        self.graph[self.path[i]].__delitem__(self.path[i - 1])
+
+            else:
+                self.c/=2
+
+
+
+        return self.max_flow_value
+
+n = int(raw_input())
+g = Graph(n)
+e = int(raw_input())
+sum=0
+for i in xrange(0,e):
+    u,v,w = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v,w) # 0 based indexing of graph nodes
+    sum+=w
+source = int(raw_input())
+sink = int(raw_input())
+ans = g.max_flow(source,sink,sum)
+print ans

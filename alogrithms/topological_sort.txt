@@ -1,0 +1,54 @@
+from collections import defaultdict
+import heapq
+large = 10**9
+stack =[]
+def dfs(s,visited,g):
+    if (visited[s]):
+        return
+    visited[s] = True
+    stack.append(s)
+    for i in g.graph[s]:
+        dfs(i,visited,g)
+
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)  # default dictionary to store graph
+        self.visited = [0]*self.V
+        self.top_sorted = []
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append((v))
+        #self.graph[v].append((u, w))
+    def topological_sort(self):
+        for i in xrange(0,self.V):
+            if self.visited[i]==0:
+                self.topological_sort_util(i)
+            if(len(self.top_sorted)==self.V):
+                break
+        for i in xrange(n-1,-1,-1):
+            print self.top_sorted[i],
+
+
+    def topological_sort_util(self, s):
+        if self.visited[s] == 1:
+            print "topological sort not possible cycle detected"
+            return
+        if self.visited[s]==2:
+            return # node already processed
+        self.visited[s] = 1
+        for u in self.graph[s]:
+            self.topological_sort_util(u)
+        self.visited[s]=2
+        self.top_sorted.append(s)
+
+
+n = int(raw_input())
+edges = int(raw_input())
+g = Graph(n)
+for i in xrange(0,edges):
+    u,v = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v) # 0 based indexing of graph nodes
+
+g.topological_sort()

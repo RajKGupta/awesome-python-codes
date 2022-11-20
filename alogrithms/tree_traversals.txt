@@ -1,0 +1,39 @@
+class TreeNode:
+    def __init__(self, parent, value):
+        self.parent = parent
+        self.left = None
+        self.right = None
+        self.value = value
+
+    def inorder(self,node):
+        if node is None:
+            return
+        self.inorder(node.left)
+        print node.value
+        self.inorder(node.right)
+
+    def preorder(self,node):
+        if node is None:
+            return
+        print node.value
+        self.inorder(node.left)
+        self.inorder(node.right)
+
+    def postorder(self, node):
+        if node is None:
+            return
+        self.inorder(node.left)
+        self.inorder(node.right)
+        print node.value
+
+
+def main():
+    root=TreeNode(None,1)
+    root.left=TreeNode(root,2)
+    root.right=TreeNode(root,3)
+    root.left.left=TreeNode(root.left,4)
+    root.inorder(root)
+    root.preorder(root)
+    root.postorder(root)
+if __name__ == '__main__':
+    main()

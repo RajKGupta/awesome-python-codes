@@ -1,0 +1,34 @@
+# large prime numbers
+
+def calculate_hash(start,end,h,p):
+    if start>0:
+        return (h[end] - h[start-1]*p[end-start+1])%B
+    elif start==0:
+        return h[end]
+
+A = 911382323
+B = 972663749
+
+input_string  = "hi_hello" #raw_input()
+h = [1]*len(input_string)
+p = [1]*len(input_string)
+
+h[0] = ord(input_string[0])
+
+for i in xrange(1,len(input_string)):
+    h[i] = (h[i-1]*A+ord(input_string[i]))%B
+    p[i] = (p[i-1]*A)%B
+
+pattern = "hi" #raw_input()
+h_p = [1]*len(pattern)
+h_p[0] = ord(pattern[0])
+for i in xrange(1,len(pattern)):
+    h_p[i] = (h_p[i-1]*A+ord(pattern[i]))%B
+
+pattern_hash = h_p[len(pattern)-1]
+for i in xrange(0,len(input_string)-len(pattern)):
+    print(pattern_hash,calculate_hash(i,i+len(pattern)-1,h,p))
+    if calculate_hash(i,i+len(pattern)-1,h,p)==pattern_hash:
+        print i # position of beginning of pattern additional check can be applied to verify if the string actually matches
+        if pattern==input_string[i:i+len(pattern)]:
+            print("actual match")

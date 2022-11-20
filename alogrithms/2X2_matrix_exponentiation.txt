@@ -1,0 +1,21 @@
+bigmod = 1000000007
+def multiply(result, mat):
+    a = [[0, 0], [0, 0]]
+    a[0][0] = ((result[0][0] * mat[0][0])+ (result[0][1] * mat[1][0]) ) % bigmod
+    a[0][1] = ((result[0][0] * mat[0][1])+ (result[0][1] * mat[1][1]) ) % bigmod
+    a[1][0] = ((result[1][0] * mat[0][0])+ (result[1][1] * mat[1][0]) ) % bigmod
+    a[1][1] = ((result[1][0] * mat[0][1])+ (result[1][1] * mat[1][1]) ) % bigmod
+    return a
+
+def matrix_expo(n):
+    mat = [[0, 1], [1, 1]]
+    result = [[1, 0], [0, 1]]
+    if n==1:
+        return mat
+    while n > 0:
+        if n % 2 == 1:
+            result = multiply(result, mat)
+        mat = multiply(mat, mat)
+        n=n >> 1
+    return result
+

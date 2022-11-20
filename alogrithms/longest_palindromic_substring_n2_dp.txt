@@ -1,0 +1,35 @@
+input_string = raw_input()
+size = len(input_string)
+start=0
+dp = [[None]*size for i in xrange(size)]
+
+for i in xrange(0,size):
+    dp[i][i] = True
+
+maxlength=k =1
+
+for i in xrange(0,size-k):
+    if input_string[i]==input_string[i+1]:
+        dp[i][i+1]=True
+        start=i
+        maxlength=2
+    else:
+        dp[i][i + 1] = False
+
+k=2
+while(k<size):
+    for i in xrange(0,size-k):
+        if input_string[i]==input_string[i+k]:
+            if dp[i+1][i+k-1]==True:
+                dp[i][i+k]=True
+                start=i
+                maxlength=k+1
+            else:
+                dp[i][i + k] = False
+        else:
+            dp[i][i + k] = False
+    k+=1
+
+print(maxlength,input_string[start:start+maxlength])
+for i in xrange(0,size):
+    print dp[i]

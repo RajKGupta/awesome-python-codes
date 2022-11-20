@@ -1,0 +1,64 @@
+from collections import defaultdict
+import heapq
+large = 10**9
+stack =[]
+def dfs(s,visited,g):
+    if (visited[s]):
+        return
+    visited[s] = True
+    stack.append(s)
+    for i in g.graph[s]:
+        dfs(i,visited,g)
+
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)  # default dictionary to store graph
+        self.visited = [False]*self.V
+    # function to add an edge to graph
+    def addEdge(self, u, v,w):
+        self.graph[u].append((v,w))
+        self.graph[v].append((u, w))
+
+    def dfs(self, s):
+        if self.visited[s] == True:
+            return
+        self.visited[s] = True
+        print s
+        for u in self.graph[s]:
+            self.dfs(u[0])
+
+    def primsAlgo(self,start):
+        h = []
+        mst = Graph(self.V)
+        visited = [False] * self.V
+        ctr = 0
+        visited[start]=True
+        for e in self.graph[start]:
+            heapq.heappush(h, (e[1], start,e[0]))  #-w for max spanning tree
+        while (ctr<n-1 and h):
+            t = heapq.heappop(h)
+            node = t[2]
+            if visited[node]:
+                continue
+            mst.addEdge(t[1],t[2],t[0])
+            visited[node] = True
+            ctr += 1
+            for dest in self.graph[node]:
+                b = dest[0]
+                w = dest[1]
+                if visited[b]:
+                    continue
+                heapq.heappush(h, (w,node,b))   #-w for max spanning tree
+        return mst
+
+
+n = int(raw_input())
+edges = int(raw_input())
+g = Graph(n)
+for i in xrange(0,edges):
+    u,v,w = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v,w)
+mst = g.primsAlgo(0)
+mst.dfs(0)

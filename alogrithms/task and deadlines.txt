@@ -1,0 +1,14 @@
+import operator
+n=int(raw_input())
+l=[]
+for i in range(0,n):
+    a,b=[int(x) for x in raw_input().split()]
+    l.append((i+1,a,b))
+l.sort(key=operator.itemgetter(1))
+final=[]
+point = 0
+time =0
+for i in l:
+    time+=i[1]
+    point +=i[2]-time
+print time,point

@@ -1,0 +1,42 @@
+from collections import defaultdict
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)
+        self.visited = [False]*self.V
+        self.values = [0]*self.V
+        self.values_dic = {}
+        self.dfs_stack =[]
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+    def input(self):
+        self.values = [int(x) for x in raw_input().split()]
+        for i in xrange(0,self.V):
+            self.values_dic[i] = defaultdict(int)
+            self.values_dic[i][self.values[i]]=1
+
+
+    def dfs(self, s):
+        if self.visited[s]:
+            return
+        self.visited[s] = True
+        self.dfs_stack.append(s)
+        for u in self.graph[s]:
+            self.dfs(u)
+            for keys in self.values_dic[u].keys():
+                self.values_dic[s][keys]+=self.values_dic[u][keys]
+
+n = int(raw_input())
+g = Graph(n)
+g.input()
+for i in xrange(0,n-1):
+    u,v = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v) # 0 based indexing of graph nodes
+
+g.dfs(0)
+dic_dfs = {}
+for i in xrange(0,g.V):
+    dic_dfs[g.dfs_stack[i]] = i
+    print g.values_dic[i]

@@ -1,0 +1,21 @@
+l = [int(x) for x in raw_input().split()]
+size =len(l)
+sum = int(raw_input())
+first = 0
+last = 0
+curr_sum=0
+found=False
+for i in range(0,size):
+    curr_sum+=l[i]
+    last+=1
+    if curr_sum>sum:
+        while curr_sum>sum:
+            curr_sum-=l[first]
+            first+=1
+    elif curr_sum==sum:
+        found=True
+        break
+if found:
+    print l[first:last]
+else:
+    print "not found"

@@ -1,0 +1,45 @@
+# count the paths from 1 node to other of length k
+
+def matmul(mat1,mat2,n):
+    ans = [[0] * n for i in xrange(0, n)]
+    for i in xrange(0,n):
+        for j in xrange(0,n):
+            for k in xrange(0,n):
+                ans[i][j]+=mat1[i][k]*mat2[k][j]
+
+    return ans
+
+def matrix_expo(mat,n,size):
+    result = [[0]*size for i in xrange(0,size)]
+    for i in xrange(0,size):
+        result[i][i]=1
+
+    if n==0:
+        return result
+    if n==1:
+        return mat
+
+    while n>0:
+        if n%2==1:
+            result = matmul(result,mat,size)
+        mat = matmul(mat,mat,size)
+        n = n>>1
+    return result
+n = int(raw_input())
+mat = [[0]*n for i in xrange(0,n)]
+e = int(raw_input())
+for i in xrange(0,e):
+    x,y = [int(i) for i in raw_input().split()]
+    mat[x][y] = 1
+for i in xrange(0,n):
+    print mat[i]
+print("*************")
+
+k = int(raw_input())
+ans = matrix_expo(mat,k,n)
+for i in xrange(0,n):
+    print ans[i]
+Q = int(raw_input())
+for q in xrange(0,Q):
+    xx,yy = [int(i) for i in raw_input().split()]
+    print("no of paths from xx too yy of length k = ",ans[xx][yy])

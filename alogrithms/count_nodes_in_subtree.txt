@@ -1,0 +1,31 @@
+from collections import defaultdict
+class Graph:
+    def __init__(self, vertices):
+        self.graph = defaultdict(list)  # dictionary containing adjacency List
+        self.V = vertices
+        self.count = [1]*self.V# No. of vertices
+
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+
+    def count_node_in_subtree(self,s,p): # including the node at which we are searching
+        self.count[s]=1
+        for j in self.graph[s]:
+            if j!=p:
+                self.count_node_in_subtree(j, s)
+                self.count[s]+=self.count[j]
+
+
+def main():
+    from sys import stdin, stdout
+    n = int(stdin.readline())
+    e = int(stdin.readline())
+    g =Graph(n)
+    for i in xrange(0,e):
+        u,v = [int(x) for x in stdin.readline().split()]
+        g.addEdge(u,v)
+    g.count_node_in_subtree(0,-1)
+    print(g.count)
+if __name__ == "__main__":
+    main()

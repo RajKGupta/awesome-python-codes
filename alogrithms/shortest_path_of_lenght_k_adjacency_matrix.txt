@@ -1,0 +1,32 @@
+# count the length of the shortest path from 1 node to other of length k
+# here matrix exponentiation will not work and manual multiplication till k needs to be done
+big = 1000000007
+def matmul(mat1,mat2,n):
+    ans = [[big] * n for xxx in xrange(0, n)]
+    for i in xrange(0,n):
+        for j in xrange(0,n):
+            for k in xrange(0,n):
+                ans[i][j]=min(mat1[i][k]+mat2[k][j],ans[i][j])
+
+    return ans
+
+n = int(raw_input())
+mat = [[big]*n for i in xrange(0,n)]
+e = int(raw_input())
+for i in xrange(0,e):
+    x,y,w = [int(i) for i in raw_input().split()]
+    mat[x][y] = w
+for i in xrange(0,n):
+    print mat[i]
+print("*************")
+
+k = int(raw_input())
+ans = matmul(mat,mat,n)
+ans = matmul(ans,ans,n)
+
+for i in xrange(0,n):
+    print ans[i]
+"""Q = int(raw_input())
+for q in xrange(0,Q):
+    xx,yy = [int(i) for i in raw_input().split()]
+    print("no of paths from xx too yy of length k = ",ans[xx][yy])"""

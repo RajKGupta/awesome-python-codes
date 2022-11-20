@@ -1,0 +1,28 @@
+n = int(raw_input())
+l = [0]*n
+dic ={}
+for i in range(0,n):
+    temp = raw_input()
+    no=0
+    k=0
+    dic[i]=len(temp)
+    for j in range(len(temp)-1,-1,-1):
+        if(temp[j]=="1"):
+            no= no | 1<<k
+        k+=1
+    l[i]=no
+maxdist =-1
+for i in range(0,n):
+    for j in range(i+1,n):
+        z = l[i]^l[j]
+
+        limit = max(dic[i],dic[j])
+        dist=0
+        for y in range(limit-1,-1,-1):
+            if(z & 1<<y)!=0:
+                dist+=1
+        print l[i], l[j], z,dist
+        if dist>maxdist:
+            maxdist=dist
+
+print maxdist

@@ -1,0 +1,10 @@
+def main():
+    from sys import stdin, stdout
+    t=int(stdin.readline())
+    for i in range(0,t):
+        size = int(stdin.readline())
+        l = [int(x) for x in stdin.readline().split()]
+        stdout.write(str(g*size)+"\n")
+
+if __name__ == "__main__":
+    main()

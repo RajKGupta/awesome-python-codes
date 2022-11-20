@@ -1,0 +1,65 @@
+from collections import defaultdict
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)
+        self.dfs_array = []
+        self.depth = [1]*self.V
+        self.dfs_array_depth = []
+
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+        
+    def dfs_util(self, s):
+        self.dfs_array.append(s)
+        self.dfs_array_depth.append(self.depth[s])
+        for u in self.graph[s]:
+            self.depth[u]=self.depth[s]+1
+            self.dfs_util(u)
+            self.dfs_array.append(s)
+            self.dfs_array_depth.append(self.depth[s])
+
+
+n = int(raw_input())
+g = Graph(n)
+for i in xrange(0,n-1):
+    u,v = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v) # 0 based indexing of graph nodes
+g.dfs_util(0)
+print g.dfs_array
+print g.dfs_array_depth
+
+### range min query part
+
+
+import math
+l = g.dfs_array_depth
+size = len(l)
+dic={}
+j = int(math.floor(math.log(size,2)) + 1)
+dic[0]=[(g.dfs_array_depth[i],g.dfs_array[i]) for i in xrange(0,len(g.dfs_array))]
+for i in range(1,j):
+    jump=2**i
+    a =[]
+    for p in range(0,size-jump+1):
+        if dic[i-1][p+jump/2][0]>dic[i-1][p][0]:
+            a.append(dic[i-1][p])
+        else:
+            a.append(dic[i-1][p+jump/2])
+    dic[i] = a
+dic_positions = defaultdict(list)
+for i in xrange(0,len(g.dfs_array)):
+    dic_positions[g.dfs_array[i]].append(i)
+a,b = (int(x) for x in raw_input().split())
+upper = max(dic_positions[a][0],dic_positions[b][0])
+lower = min(dic_positions[a][0],dic_positions[b][0])
+jump = int(math.floor(math.log(upper-lower+1,2)))
+ans =0
+if dic[jump][lower][0] < dic[jump][upper-2**jump+1][0]:
+    ans =  dic[jump][lower][1]
+else:
+   ans = dic[jump][upper - 2 ** jump + 1][1]
+distance = g.depth[a]+g.depth[b]-2*g.depth[ans]
+print distance

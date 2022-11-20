@@ -1,0 +1,66 @@
+import operator
+from collections import defaultdict
+class Graph:
+    def __init__(self, vertices):
+        self.graph = defaultdict(list)  # dictionary containing adjacency List
+        self.V = vertices
+        self.visited = [False]*vertices
+
+    # function to add an edge to graph
+    def addEdge(self, u, v,w):
+        self.graph[u].append((v,w))
+        self.graph[v].append((u,w))
+
+    def dfs(self,s):
+        if self.visited[s]==True:
+            return
+        self.visited[s]=True
+        print s
+        for u in self.graph[s]:
+            self.dfs(u[0])
+
+def find(ar, node):
+    if ar[node] != node:
+        ar[node] = find(ar, ar[node])
+    return ar[node]
+
+
+def union(ar, u, v):
+    root_u = find(ar, u)
+    root_v = find(ar, v)
+    if (root_u != root_v):
+        ar[root_u] = root_v
+
+
+def main():
+    n = int(raw_input())
+    m =int(raw_input())
+    edge = []
+    g = Graph(n)
+    mst=[]
+    for i in xrange(0,m):
+        a,b,w = [int(x) for x in raw_input().split()]
+        edge.append((a,b,w)) # for 0 based indexing of the graph
+
+    edge.sort(key=operator.itemgetter(2)) # set reverse =True for Max spanning tree
+    print(edge)
+    l = [int(x) for x in xrange(0,n)]
+    ctr = 0
+    for e in edge:
+        a= e[0]
+        b = e[1]
+        #print e
+        root_a = find(l,a)
+        root_b = find(l,b)
+        if root_a!=root_b:
+            g.addEdge(a,b,e[2])
+            union(l,a,b)
+            #print(l)
+            mst.append(e)
+            ctr+=1
+            if ctr==n-1:
+                break
+    g.dfs(find(l,l[0]))
+    print(mst)
+if __name__ == "__main__":
+    main()

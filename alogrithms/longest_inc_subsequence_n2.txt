@@ -1,0 +1,23 @@
+l = [int(x) for x in raw_input().split()]
+size = len(l)
+a = [1]*size
+pos = [x for x in range(0,size)]
+maxpos=0
+for i in range(1,size):
+    for j in range(0,i):
+        if l[i]>l[j]:
+            #a[i]=max(a[i],a[j]+1)
+            if a[j]+1>a[i]:
+                a[i]=a[j]+1
+                pos[i]=j
+    if(a[i]>a[maxpos]):
+        maxpos=i
+
+print maxpos,a[maxpos]
+final =[]
+while(pos[maxpos]!=maxpos):
+    final.append(l[maxpos])
+    maxpos = pos[maxpos]
+final.append(l[maxpos])
+final.reverse()
+print str.join(' ',map(str,final))

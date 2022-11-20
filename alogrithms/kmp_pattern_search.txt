@@ -1,0 +1,42 @@
+input_string = raw_input()
+pattern = raw_input()
+
+size_input = len(input_string)
+size_pattern = len(pattern)
+
+kmp_array = [0]*size_pattern
+j=0
+for i in xrange(1,size_pattern):
+    if pattern[i]==pattern[j]:
+        kmp_array[i]=j+1
+        j+=1
+    else:
+        while(j>0):
+            j = kmp_array[j-1]
+            if pattern[j]==pattern[i]:
+                kmp_array[i]=j+1
+                break
+
+print(kmp_array)
+j=0
+found =False
+for i in xrange(0,size_input):
+    if input_string[i]==pattern[j]:
+        j+=1
+        if j == size_pattern:
+            print("pattern found at ", i - size_pattern+1)
+            j = kmp_array[j-1]
+            found = True
+        else:
+            continue
+    else:
+        while j>0:
+            j=kmp_array[j-1]
+            if pattern[j]==input_string[i]:
+                j+=1
+                break
+        print(j)
+
+
+if not found:
+    print("not found at all")

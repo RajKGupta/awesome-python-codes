@@ -1,0 +1,44 @@
+from collections import defaultdict
+import heapq
+large = 10**9
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(list)  # default dictionary to store graph
+
+    # function to add an edge to graph
+    def addEdge(self, u, v,w):
+        self.graph[u].append((v,w))
+        self.graph[v].append((u, w))
+
+    def dijkstra(self,start):
+        distance = [large] * self.V
+        distance[start] = 0
+        h = []
+        visited = [False] * self.V
+        heapq.heappush(h, (0, start))
+        while (h):
+            t = heapq.heappop(h)
+            node = t[1]
+            if visited[node]:
+                continue
+            visited[node] = True
+            for dest in self.graph[node]:
+                b = dest[0]
+                w = dest[1]
+                if distance[node] + w < distance[b]:
+                    distance[b] = distance[node] + w
+                    heapq.heappush(h, (-distance[b], b))
+        return distance
+
+
+n = int(raw_input())
+edges = int(raw_input())
+g = Graph(n)
+for i in xrange(0,edges):
+    u,v,w = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v,w)
+distance = [large]*n
+start = int(raw_input())
+print g.dijkstra(start)

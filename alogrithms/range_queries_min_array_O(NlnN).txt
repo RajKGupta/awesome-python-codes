@@ -1,0 +1,19 @@
+import math
+l = [int(x) for x in raw_input().split()]
+size = len(l)
+dic={}
+j = int(math.floor(math.log(size,2)) + 1)
+dic[0]=l
+for i in range(1,j):
+    jump=2**i
+    a =[]
+    for p in range(0,size-jump+1):
+        a.append(min(dic[i-1][p+jump/2],dic[i-1][p]))
+    dic[i] = a
+
+q = int(raw_input())
+for Q in range(0,q):
+    a,b = [int(x) for x in raw_input().split()]
+    jump = int(math.floor(math.log(b-a+1,2)))
+    ans=min(dic[jump][a],dic[jump][b-2**jump+1])
+    print ans

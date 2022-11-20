@@ -1,0 +1,70 @@
+import Queue
+from collections import defaultdict
+big = 10**9
+class Graph(object):
+
+    def __init__(self, vertices):
+        self.V = vertices  # No. of vertices
+        self.graph = defaultdict(dict)
+        #self.reverse_graph = defaultdict(dict)
+        self.visited = [False]*self.V
+
+    # function to add an edge to graph
+    def addEdge(self, u, v,w):
+        self.graph[u][v] = w
+        #self.reverse_graph[v][u]=0
+
+    def edmond_karp_bfs(self,start,sink):
+        self.visited = [False]*self.V
+        parent = [start]*self.V
+        q = Queue.Queue(maxsize=self.V)
+        q.put(start)
+        self.visited[start] = True
+        while (not q.empty()):
+            i = q.get()
+            for key in self.graph[i].keys():
+                if (self.visited[key]):
+                    continue
+                parent[key] = i
+
+                if key==sink:
+                    flow = big
+                    path = [sink]
+                    while(key!=start):
+                        path.append(parent[key])
+                        flow = min(flow, self.graph[parent[key]][key])
+                        key=parent[key]
+
+                    for i in xrange(len(path)-1,0,-1):
+                        if self.graph[path[i]][path[i-1]]>flow:
+                            self.graph[path[i]][path[i - 1]]-=flow
+                        else:
+                            self.graph[path[i]].__delitem__(path[i-1])
+
+                    return True,flow
+                self.visited[key] = True
+                q.put(key);
+        else:
+            return False,0
+
+    def max_flow(self,source,sink):
+        max_flow=0
+
+        while True:
+            more_path,f =self.edmond_karp_bfs(source,sink)
+            max_flow+=f
+            if more_path==False:
+                break
+
+        return max_flow
+
+n = int(raw_input())
+g = Graph(n)
+e = int(raw_input())
+for i in xrange(0,e):
+    u,v,w = [int(x) for x in raw_input().split()]
+    g.addEdge(u,v,w) # 0 based indexing of graph nodes
+
+source = int(raw_input())
+sink = int(raw_input())
+print g.max_flow(source,sink)

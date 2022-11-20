@@ -1,0 +1,26 @@
+import Queue
+n = int(raw_input())
+e = int(raw_input())
+g = {}
+for i in range(0,n):
+    g[i]=[]
+for i in range(0,e):
+    u,v = map(int,raw_input().split())
+    g[u].append(v)
+visited = [False]*n
+q = Queue.Queue(maxsize = n)
+start = int(raw_input())
+q.put(start)
+visited[start] = True
+distance = [-999]*n
+distance[start]=0
+while(not q.empty()):
+    i=q.get()
+    for j in g[i]:
+        if(visited[j]):
+            continue
+        visited[j]=True
+        distance[j]=distance[i]+1
+        q.put(j);
+print distance
+

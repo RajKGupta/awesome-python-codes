@@ -1,0 +1,111 @@
+class Node(object):
+    def __init__(self, name):
+        """Assumes name is a string"""
+        self.name = name
+    def getName(self):
+        return self.name
+    def __str__(self):
+        return self.name
+ 
+class Edge(object):
+    def __init__(self, src, dest):
+        """Assumes src and dest are nodes"""
+        self.src = src
+        self.dest = dest
+    def getSource(self):
+        return self.src
+    def getDestination(self):
+        return self.dest
+    def __str__(self):
+        return self.src.getName() + '->' + self.dest.getName()
+ 
+class Digraph(object):
+    """edges is a dict mapping each node to a list of
+    its children"""
+    def __init__(self):
+        self.edges = {}
+    def addNode(self, node):
+        if node not in self.edges:
+            self.edges[node] = []
+ 
+    def addEdge(self, edge):
+        src = edge.getSource()
+        dest = edge.getDestination()
+        if not (src in self.edges and dest in self.edges):
+            raise ValueError('Node not in graph')
+        self.edges[src].append(dest)
+    def childrenOf(self, node):
+        return self.edges[node]
+    def hasNode(self, node):
+        return node in self.edges
+    def getNode(self, name):
+        for n in self.edges:
+            if n.getName() == name:
+            	return n
+            else:
+		print "Does not Exist"
+    def __str__(self):
+        result = ''
+        for src in self.edges:
+            for dest in self.edges[src]:
+                result = result + src.getName() + '->'\
+                         + dest.getName() + '\n'
+        return result[:-1] #omit final newline
+ 
+class Graph(Digraph):
+    def addEdge(self, edge):
+        Digraph.addEdge(self, edge)
+        rev = Edge(edge.getDestination(), edge.getSource())
+        Digraph.addEdge(self, rev)
+ 
+a= []
+a = map(int,raw_input().split())
+n = a[0]
+m = a[1]
+q = a[2]
+ 
+pathlist = []
+def DFS(graph, start, end, path):
+    path = path + [start]
+    if start == end:
+        return path
+    for node in graph.childrenOf(start):
+        if node not in path: #avoid cycles
+            newPath = DFS(graph, node, end, path)
+            if newPath != None:
+            	pathlist.append(newPath)
+ 
+ 
+tunnel = Graph()
+ 
+for i in range(1,n+1):
+	tunnel.addNode(Node(str(i)))
+ 
+for i in range(1,n):
+	edgelist = []
+	edgelist = map(str,raw_input().split())
+	tunnel.addEdge(Edge(tunnel.getNode(edgelist[0]), tunnel.getNode(edgelist[1])))
+ 
+print tunnel
+ 
+teleport = Graph()
+for i in range(1,m+1):
+	temp = []
+	temp  = map(str,raw_input().split())
+	source = temp[0]+"_"+temp[1]
+	dest = temp[2]+"_"+temp[3]
+	teleport.addNode(Node(source))
+	teleport.addNode(Node(dest))
+	teleport.addEdge(Edge(teleport.getNode(source), teleport.getNode(dest)))
+ 
+print teleport
+while q>0:
+	q-=1
+	temp = []
+	temp  = map(str,raw_input().split())
+	source = temp[0]+"_"+temp[1]
+	dest = temp[2]+"_"+temp[3]
+	print dest
+	del pathlist[:]
+	DFS(teleport, teleport.getNode(source), teleport.getNode(dest), [])
+	print pathlist

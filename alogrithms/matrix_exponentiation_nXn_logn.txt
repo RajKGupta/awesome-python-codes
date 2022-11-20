@@ -1,0 +1,25 @@
+def matmul(mat1,mat2,n):
+    ans = [[0] * n for i in xrange(0, n)]
+    for i in xrange(0,n):
+        for j in xrange(0,n):
+            for k in xrange(0,n):
+                ans[i][j]+=mat1[i][k]*mat2[k][j]
+
+    return ans
+
+def matrix_expo(mat,n,size):
+    result = [[0]*size for i in xrange(0,size)]
+    for i in xrange(0,size):
+        result[i][i]=1
+
+    if n==0:
+        return result
+    if n==1:
+        return mat
+
+    while n>0:
+        if n%2==1:
+            result = matmul(result,mat,size)
+        mat = matmul(mat,mat,size)
+        n = n>>1
+    return result
